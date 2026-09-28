@@ -16,10 +16,10 @@ export function EnvelopeOpening({ onOpenComplete }: EnvelopeOpeningProps) {
     if (isOpening || isOpened) return;
     setIsOpening(true);
 
-    // Play triumphant classical wedding fanfare and start classical wedding march
+    // Play romantic acoustic piano chime and start Canon in D
     try {
-      weddingAudio.playFanfareTriumphant();
-      weddingAudio.startClassicalWeddingMarch();
+      weddingAudio.playOpeningChime();
+      weddingAudio.startMusic();
       setMusicEnabled(true);
     } catch {
       // Audio autoplay policy fallback

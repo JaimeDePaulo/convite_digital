@@ -6,12 +6,14 @@ interface MobileQuickBarProps {
   onOpenRsvp: () => void;
   onOpenMap: () => void;
   onOpenCalendar: () => void;
+  onOpenAudioModal?: () => void;
 }
 
 export function MobileQuickBar({
   onOpenRsvp,
   onOpenMap,
   onOpenCalendar,
+  onOpenAudioModal,
 }: MobileQuickBarProps) {
   const [isPlaying, setIsPlaying] = useState(() => weddingAudio.getIsPlaying());
 
@@ -26,7 +28,7 @@ export function MobileQuickBar({
         {/* WhatsApp RSVP */}
         <button
           onClick={onOpenRsvp}
-          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-[#0b3319] font-bold text-[11px] px-2 py-1 shadow-xs active:scale-95 transition-transform"
+          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#25D366] text-[#0b3319] font-bold text-[11px] px-2 py-1 shadow-xs active:scale-95 transition-transform cursor-pointer"
         >
           <div className="flex items-center gap-1">
             <Send className="w-3.5 h-3.5" />
@@ -38,7 +40,7 @@ export function MobileQuickBar({
         {/* Google Maps */}
         <button
           onClick={onOpenMap}
-          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#1b4e41] text-white font-medium text-[11px] px-2 py-1 shadow-xs active:scale-95 transition-transform"
+          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#1b4e41] text-white font-medium text-[11px] px-2 py-1 shadow-xs active:scale-95 transition-transform cursor-pointer"
         >
           <div className="flex items-center gap-1">
             <MapPin className="w-3.5 h-3.5 text-[#fae596]" />
@@ -50,7 +52,7 @@ export function MobileQuickBar({
         {/* Calendar */}
         <button
           onClick={onOpenCalendar}
-          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#faf6ed] border border-[#dcd1be] text-[#20493c] font-medium text-[11px] px-2 py-1 shadow-2xs active:scale-95 transition-transform"
+          className="flex-1 min-h-[44px] flex flex-col items-center justify-center rounded-xl bg-[#faf6ed] border border-[#dcd1be] text-[#20493c] font-medium text-[11px] px-2 py-1 shadow-2xs active:scale-95 transition-transform cursor-pointer"
         >
           <div className="flex items-center gap-1">
             <Calendar className="w-3.5 h-3.5 text-[#9e7617]" />
@@ -59,10 +61,16 @@ export function MobileQuickBar({
           <span className="text-[9px] text-[#718b80]">Calendário</span>
         </button>
 
-        {/* Music Sound Toggle */}
+        {/* Music Sound Toggle & Link */}
         <button
-          onClick={handleToggleMusic}
-          className="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center rounded-xl bg-white border border-[#dfd6c5] text-[#3d5f52] text-[10px] p-1 active:scale-95 transition-transform"
+          onClick={() => {
+            if (onOpenAudioModal) {
+              onOpenAudioModal();
+            } else {
+              handleToggleMusic();
+            }
+          }}
+          className="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center rounded-xl bg-white border border-[#dfd6c5] text-[#3d5f52] text-[10px] p-1 active:scale-95 transition-transform cursor-pointer"
           aria-label="Controle de música"
         >
           {isPlaying ? (
@@ -70,7 +78,7 @@ export function MobileQuickBar({
           ) : (
             <Music2 className="w-4 h-4 text-[#789387]" />
           )}
-          <span className="text-[8px] text-[#69867b] mt-0.5">{isPlaying ? 'Som On' : 'Som'}</span>
+          <span className="text-[8px] text-[#69867b] mt-0.5">{isPlaying ? 'Música' : 'Música'}</span>
         </button>
       </div>
     </div>

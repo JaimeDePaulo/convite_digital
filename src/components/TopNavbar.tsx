@@ -5,9 +5,10 @@ import { useState } from 'react';
 interface TopNavbarProps {
   onReopenEnvelope: () => void;
   onOpenRsvp: () => void;
+  onOpenAudioModal?: () => void;
 }
 
-export function TopNavbar({ onReopenEnvelope, onOpenRsvp }: TopNavbarProps) {
+export function TopNavbar({ onReopenEnvelope, onOpenRsvp, onOpenAudioModal }: TopNavbarProps) {
   const [isPlaying, setIsPlaying] = useState(() => weddingAudio.getIsPlaying());
 
   const handleToggleMusic = () => {
@@ -47,19 +48,30 @@ export function TopNavbar({ onReopenEnvelope, onOpenRsvp }: TopNavbarProps) {
 
         {/* Zone 3: 1-2 primary actions */}
         <div className="flex items-center gap-2.5">
-          {/* Audio toggle button */}
-          <button
-            onClick={handleToggleMusic}
-            className="p-2 rounded-full border border-[#d6ccb9] bg-white/80 text-[#36574a] hover:bg-white transition-colors"
-            title={isPlaying ? 'Pausar melodia' : 'Tocar melodia suave'}
-            aria-label="Controle de música"
-          >
-            {isPlaying ? (
-              <Music className="w-4 h-4 text-[#1b4e41] animate-spin" />
-            ) : (
-              <Music2 className="w-4 h-4 text-[#738e82]" />
+          {/* Audio toggle and modal opener */}
+          <div className="flex items-center bg-white/90 border border-[#d6ccb9] rounded-full p-0.5 shadow-2xs">
+            <button
+              onClick={handleToggleMusic}
+              className="p-1.5 rounded-full text-[#36574a] hover:bg-[#faf7f0] transition-colors"
+              title={isPlaying ? 'Pausar Canon in D' : 'Tocar Canon in D'}
+              aria-label="Controle de música"
+            >
+              {isPlaying ? (
+                <Music className="w-4 h-4 text-[#1b4e41] animate-spin" />
+              ) : (
+                <Music2 className="w-4 h-4 text-[#738e82]" />
+              )}
+            </button>
+            {onOpenAudioModal && (
+              <button
+                onClick={onOpenAudioModal}
+                className="hidden sm:block text-[11px] font-medium text-[#466559] hover:text-[#1b4e41] pr-2.5 pl-1 transition-colors"
+                title="Configurar áudio / Inserir link de música"
+              >
+                Canon in D
+              </button>
             )}
-          </button>
+          </div>
 
           {/* Re-open envelope button */}
           <button

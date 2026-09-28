@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EnvelopeOpening } from './components/EnvelopeOpening';
 import { TopNavbar } from './components/TopNavbar';
 import { HeroInvitation } from './components/HeroInvitation';
@@ -9,13 +9,26 @@ import { RsvpSection } from './components/RsvpWhatsAppModal';
 import { CalendarModal } from './components/CalendarModal';
 import { GuestbookAndDetails } from './components/GuestbookAndDetails';
 import { MobileQuickBar } from './components/MobileQuickBar';
+import { AudioPlayerModal } from './components/AudioPlayerModal';
 import { Heart, Sparkles, MailOpen } from 'lucide-react';
 import { MAP_LOCATIONS } from './utils/calendar';
+import { weddingAudio } from './utils/audio';
 
 export default function App() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
+  const [audioModalOpen, setAudioModalOpen] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(() => weddingAudio.getIsPlaying());
   const [calendarDefaultEvent, setCalendarDefaultEvent] = useState<'civil' | 'religiosa' | 'reception'>('religiosa');
+
+  useEffect(() => {
+    weddingAudio.initFromStorage();
+  }, []);
+
+  const handleToggleAudio = () => {
+    const active = weddingAudio.toggle();
+    setIsPlayingAudio(active);
+  };
 
   const handleOpenMap = (type: 'civil' | 'religiosa' | 'reception') => {
     const loc = MAP_LOCATIONS[type];
@@ -45,13 +58,17 @@ export default function App() {
     <div className="min-h-screen bg-[#faf8f4] text-[#2c3e38] font-sans relative selection:bg-[#cbe2d7] selection:text-[#133e32]">
       {/* 1. Opening Animation (Interactive Digital Envelope) */}
       {!envelopeOpened && (
-        <EnvelopeOpening onOpenComplete={() => setEnvelopeOpened(true)} />
+        <EnvelopeOpening onOpenComplete={() => {
+          setEnvelopeOpened(true);
+          setIsPlayingAudio(true);
+        }} />
       )}
 
       {/* 2. Top Navigation Bar */}
       <TopNavbar
         onReopenEnvelope={() => setEnvelopeOpened(false)}
         onOpenRsvp={handleScrollToRsvp}
+        onOpenAudioModal={() => setAudioModalOpen(true)}
       />
 
       {/* Subtle background ambient watercolor textures */}
@@ -93,11 +110,20 @@ export default function App() {
         defaultEvent={calendarDefaultEvent}
       />
 
+      {/* Audio Player & Music Settings Modal */}
+      <AudioPlayerModal
+        isOpen={audioModalOpen}
+        onClose={() => setAudioModalOpen(false)}
+        isPlaying={isPlayingAudio}
+        onTogglePlay={handleToggleAudio}
+      />
+
       {/* Mobile Sticky Bottom Quick Action Bar */}
       <MobileQuickBar
         onOpenRsvp={handleScrollToRsvp}
         onOpenMap={handleScrollToLocations}
         onOpenCalendar={() => handleOpenCalendar('reception')}
+        onOpenAudioModal={() => setAudioModalOpen(true)}
       />
 
       {/* Elegant Footer */}
@@ -117,17 +143,24 @@ export default function App() {
             <span>Lubango, Huíla, Angola</span>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
             <button
               onClick={() => {
                 setEnvelopeOpened(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#d6ccb9] text-[11px] text-[#426456] hover:bg-[#faf7f0] transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#d6ccb9] text-[11px] text-[#426456] hover:bg-[#faf7f0] transition-colors cursor-pointer"
             >
               <MailOpen className="w-3 h-3 text-[#d4af37]" />
-              <span>Ver animação de abertura do envelope</span>
+              <span>Reabrir envelope</span>
               <Sparkles className="w-3 h-3 text-[#d4af37]" />
+            </button>
+
+            <button
+              onClick={() => setAudioModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#d6ccb9] text-[11px] text-[#426456] hover:bg-[#faf7f0] transition-colors cursor-pointer"
+            >
+              <span>Canon in D (Música)</span>
             </button>
           </div>
         </div>
