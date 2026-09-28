@@ -1,0 +1,7 @@
+{
+  "name": "Convite de Casamento - Paulino & Ana",
+  "description": "Convite digital interativo de casamento de Paulino Joaquim e Ana da Cruz com abertura de envelope, contagem regressiva, mapas, galeria de fotos e confirmação via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
